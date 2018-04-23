@@ -8,10 +8,13 @@
 #include <time.h>
 #include <math.h>
 
+using namespace std;
+using namespace cv;
+
 int main(void)
 {
 	//VideoCapture cap(0); // use the first camera found on the system
-	cv::VideoCapture cap("../mt_camera_raw.AVI");
+	cv::VideoCapture cap("C:/mt_camera_raw.AVI");
 
 
 	if (!cap.isOpened())
@@ -24,12 +27,16 @@ int main(void)
 	double videoWidth = cap.get(CV_CAP_PROP_FRAME_WIDTH);
 	double videoHeight = cap.get(CV_CAP_PROP_FRAME_HEIGHT);
 
-	cv::Mat frame, original, grey;
+	cv::Mat frame, original, grey, background;
+
+	
 
 	int currentFrame = 0; // frame counter
 	clock_t ms_start, ms_end, ms_time; // time
 
 	char buffer[10]; // buffer for int to ascii conversion -> itoa(...)
+
+	cap >> background;
 
 	for (;;)
 	{
@@ -50,6 +57,10 @@ int main(void)
 		//--------------------------
 		// your code goes here
 		//--------------------------
+
+
+		absdiff(original, background, original);
+
 
 		if (cv::waitKey(1) == 27) // wait for user input
 		{
