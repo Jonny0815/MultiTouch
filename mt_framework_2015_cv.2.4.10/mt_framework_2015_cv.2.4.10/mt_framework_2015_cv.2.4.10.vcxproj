@@ -143,7 +143,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\opencv2_4_10\build\x64\vc12\lib;C:\Users\Jonny0815\Source\opencv\build\x64\vc12\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Users\Jonny0815\Source\opencv\build\x64\vc12\lib;C:\opencv2_4_10\build\x64\vc12\lib;C:\Users\Jonny0815\Source\opencv\build\x64\vc12\lib</AdditionalLibraryDirectories>
       <AdditionalOptions>opencv_core2410.lib opencv_imgproc2410.lib opencv_highgui2410.lib ws2_32.lib winmm.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
