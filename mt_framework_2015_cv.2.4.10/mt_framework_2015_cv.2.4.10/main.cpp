@@ -8,6 +8,8 @@
 #include <time.h>
 #include <math.h>
 #include <vector>
+#include <string>
+#include "Finger.h"
 
 using namespace std;
 using namespace cv;
@@ -28,23 +30,24 @@ int main(void)
 	double videoWidth = cap.get(CV_CAP_PROP_FRAME_WIDTH);
 	double videoHeight = cap.get(CV_CAP_PROP_FRAME_HEIGHT);
 
+	int counter = 0;
+
 	cv::Mat frame, original, grey, background, background_blured, binary, source;
 
 	Size blursizebig, blursizesmall;
 
-	blursizebig.height = 11;
-	blursizebig.width = 11;
+	blursizebig.height = 17;
+	blursizebig.width = 17;
 
-	blursizesmall.height = 3;
-	blursizesmall.width = 3;
+	blursizesmall.height = 5;
+	blursizesmall.width = 5;
 
 
 	vector<vector<Point>>  contours; 
 	vector<Vec4i>  hierarchy;
+	vector<Finger> fingerVec;
 
-
-
-
+	
 	int currentFrame = 0; // frame counter
 	clock_t ms_start, ms_end, ms_time; // time
 
@@ -85,7 +88,7 @@ int main(void)
 
 		cvtColor(original, binary, CV_BGR2GRAY);
 		
-
+		RotatedRect tempRect;
 		
 		findContours(binary, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
 		// iterate through all the top-level contours -> "hierarchy" may not be empty!)
@@ -93,20 +96,80 @@ int main(void)
 		{
 			for (int idx = 0; idx >= 0; idx = hierarchy[idx][0])
 			{
+				Finger * besterFinger = nullptr;
 				// check contour size (number of points) and area ("blob" size)
 				if (contourArea(Mat(contours.at(idx))) > 30 && contours.at(idx).size() > 4)
 				{
-					ellipse(source, fitEllipse(Mat(contours.at(idx))),
+					tempRect = fitEllipse(Mat(contours.at(idx)));
+					ellipse(source, tempRect,
 						Scalar(0, 0, 255), 1, 8); // fit & draw ellipse to contour at index
 					drawContours(source, contours, idx, Scalar(255, 0, 0), 1, 8,
 						hierarchy); // draw contour at index
+
+
+					if (fingerVec.size() != 0) {
+						double nearest = 300;
+
+						for (int i = 0; i < fingerVec.size(); i++)
+						{
+							double maybeMe = fingerVec.at(i).getDistance((int)tempRect.center.x, (int)tempRect.center.y);
+							if (maybeMe > 0 && maybeMe < nearest) {
+								nearest = maybeMe;
+								besterFinger = &fingerVec.at(i);
+
+							}
+
+							if (besterFinger != nullptr) {
+								besterFinger->setCoordiates((int)tempRect.center.x, (int)tempRect.center.y,currentFrame);
+							}
+
+							else {
+
+								Finger fTemp;
+								fTemp.setCoordiates((int)tempRect.center.x, (int)tempRect.center.y, currentFrame);
+								fingerVec.push_back(fTemp);	
+								besterFinger = &fTemp;
+							}
+
+						}
+
+					}
+
+					else {
+						Finger fTemp;
+						besterFinger = &fTemp;
+						fTemp.setCoordiates((int)tempRect.center.x, (int)tempRect.center.y,currentFrame);
+						fingerVec.push_back(fTemp);
+					}
+					
+
+
+					
+				}
+
+				// show xy Coordanates and draw them
+				if (besterFinger != nullptr) {
+					String text = to_string((int)tempRect.center.x) + " " + to_string((int)tempRect.center.y) + " " + to_string(besterFinger->getID());
+					putText(source, text, CvPoint(tempRect.center), FONT_HERSHEY_SIMPLEX, 0.5, cvScalar(255, 255, 255), 1);
+					//cout << tempRect.center << endl;
+
 				}
 			}
+
+			for (int i = 0; i < fingerVec.size(); i++) {
+
+				if (5 >(currentFrame - fingerVec.at(i).getcounterFrame())) {
+
+					fingerVec.erase(fingerVec.begin() + i);
+				}
+
+			}
+			
 		}
 		
 
 
-		if (cv::waitKey(1) == 27) // wait for user input
+		if (cv::waitKey(100) == 27) // wait for user input
 		{
 			std::cout << "TERMINATION: User pressed ESC\n";
 			break;

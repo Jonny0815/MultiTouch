@@ -154,10 +154,14 @@
     <ClCompile Include="..\oscpack\osc\OscTypes.cpp" />
     <ClCompile Include="..\TUIO\TuioServer.cpp" />
     <ClCompile Include="..\TUIO\TuioTime.cpp" />
+    <ClCompile Include="Finger.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Finger.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
