@@ -32,11 +32,11 @@ int main(void)
 
 	Size blursizebig, blursizesmall;
 
-	blursizebig.height = 17;
-	blursizebig.width = 17;
+	blursizebig.height = 11;
+	blursizebig.width = 11;
 
-	blursizesmall.height = 5;
-	blursizesmall.width = 5;
+	blursizesmall.height = 3;
+	blursizesmall.width = 3;
 
 
 	vector<vector<Point>>  contours; 
