@@ -8,6 +8,7 @@
 #include <time.h>
 #include <math.h>
 #include <vector>
+#include "Finger.h"
 
 using namespace std;
 using namespace cv;
@@ -32,17 +33,18 @@ int main(void)
 
 	Size blursizebig, blursizesmall;
 
-	blursizebig.height = 11;
-	blursizebig.width = 11;
+	blursizebig.height = 17;
+	blursizebig.width = 17;
 
-	blursizesmall.height = 3;
-	blursizesmall.width = 3;
+	blursizesmall.height = 5;
+	blursizesmall.width = 5;
 
 
 	vector<vector<Point>>  contours; 
 	vector<Vec4i>  hierarchy;
+	vector<Finger*> fingers;
 
-
+	RotatedRect rr;
 
 
 	int currentFrame = 0; // frame counter
@@ -104,9 +106,77 @@ int main(void)
 			}
 		}
 		
+		if (contours.size() != 0)
+		{
+			for (size_t i = 0; i < contours.size(); i++)
+			{
+				if (contourArea(Mat(contours.at(i))) > 30 && contours.at(i).size() > 4) {
+					rr = fitEllipse(Mat(contours.at(i))); // contour to be matched with finger
+				}
+				else {
+					break;
+				}
+				Finger* best_finger = nullptr; 
+
+				if (fingers.size() != 0)
+				{
+					int nearest = 100;
+
+					for (size_t j = 0; j < fingers.size(); j++)
+					{
+						float distance = fingers.at(j)->get_distance(rr.center); // distance between rr and finger i, -1 if out of radius
+
+						if (distance > 0 && distance < nearest) 
+						{
+							nearest = distance;
+							best_finger = fingers.at(i);
+						}
+
+					}
+
+					if (best_finger != nullptr)
+					{
+						best_finger->update(rr.center, currentFrame);
+					}
+					else {
+						fingers.push_back(new Finger(rr.center, currentFrame));
+					}
+
+				}
+				else {
+
+					
+					fingers.push_back(new Finger(rr.center, currentFrame));
+
+				}
 
 
-		if (cv::waitKey(1) == 27) // wait for user input
+
+
+			}
+		}
+
+		//if (fingers.size() != 0) // delete outdated fingers
+		//{
+
+		//	for (size_t k = 0; k < fingers.size(); k++)
+		//	{
+		//		if (5 < currentFrame - fingers.at(k)->get_frame()) // finger hasnt been updated for 5+ frames
+		//		{
+		//			delete fingers.at(k);
+		//			
+		//		}
+		//	}
+		//	
+		//}
+
+		for (size_t i = 0; i < fingers.size(); i++) // draw coordinates
+		{
+			putText(source, fingers.at(i)->get_info(), CvPoint(fingers.at(i)->get_pos()), FONT_HERSHEY_SIMPLEX, 0.5, cvScalar(255, 255, 255), 1);
+
+		}
+
+		if (cv::waitKey(50) == 27) // wait for user input
 		{
 			std::cout << "TERMINATION: User pressed ESC\n";
 			break;
