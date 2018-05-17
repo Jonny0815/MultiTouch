@@ -45,7 +45,7 @@ int main(void)
 	vector<Finger*> fingers;
 
 	RotatedRect rr;
-
+	Finger* best_match;
 
 	int currentFrame = 0; // frame counter
 	clock_t ms_start, ms_end, ms_time; // time
@@ -98,82 +98,75 @@ int main(void)
 				// check contour size (number of points) and area ("blob" size)
 				if (contourArea(Mat(contours.at(idx))) > 30 && contours.at(idx).size() > 4)
 				{
-					ellipse(source, fitEllipse(Mat(contours.at(idx))),
-						Scalar(0, 0, 255), 1, 8); // fit & draw ellipse to contour at index
-					drawContours(source, contours, idx, Scalar(255, 0, 0), 1, 8,
-						hierarchy); // draw contour at index
-				}
-			}
-		}
-		
-		if (contours.size() != 0)
-		{
-			for (size_t i = 0; i < contours.size(); i++)
-			{
-				if (contourArea(Mat(contours.at(i))) > 30 && contours.at(i).size() > 4) {
-					rr = fitEllipse(Mat(contours.at(i))); // contour to be matched with finger
-				}
-				else {
-					break;
-				}
-				Finger* best_finger = nullptr; 
+					rr = fitEllipse(Mat(contours.at(idx)));
 
-				if (fingers.size() != 0)
-				{
-					int nearest = 100;
+					ellipse(source, rr, Scalar(0, 0, 255), 1, 8); // fit & draw ellipse to contour at index
+					drawContours(source, contours, idx, Scalar(255, 0, 0), 1, 8, hierarchy); // draw contour at index
 
-					for (size_t j = 0; j < fingers.size(); j++)
+					best_match = nullptr; // reset best matching finger
+
+					if (fingers.size() != 0)
 					{
-						float distance = fingers.at(j)->get_distance(rr.center); // distance between rr and finger i, -1 if out of radius
+						double clostest = 150;
+						
 
-						if (distance > 0 && distance < nearest) 
+						for (size_t i = 0; i < fingers.size(); i++)
 						{
-							nearest = distance;
-							best_finger = fingers.at(i);
+							if (fingers.at(i)->get_distance(rr.center) > 0 && fingers.at(i)->get_distance(rr.center) < clostest && fingers.at(i)->get_active())
+							{
+								clostest = fingers.at(i)->get_distance(rr.center);
+								best_match = fingers.at(i);
+							}
 						}
 
-					}
+						if (best_match != nullptr)
+						{
+							best_match->update(rr.center, currentFrame);
+						}
+						else
+						{
+							fingers.push_back(new Finger(rr.center, currentFrame));
+						}
+						
 
-					if (best_finger != nullptr)
-					{
-						best_finger->update(rr.center, currentFrame);
 					}
 					else {
 						fingers.push_back(new Finger(rr.center, currentFrame));
 					}
 
 				}
-				else {
-
-					
-					fingers.push_back(new Finger(rr.center, currentFrame));
-
-				}
-
-
-
-
 			}
 		}
+		
+		
 
-		//if (fingers.size() != 0) // delete outdated fingers
-		//{
-
-		//	for (size_t k = 0; k < fingers.size(); k++)
-		//	{
-		//		if (5 < currentFrame - fingers.at(k)->get_frame()) // finger hasnt been updated for 5+ frames
-		//		{
-		//			delete fingers.at(k);
-		//			
-		//		}
-		//	}
-		//	
-		//}
-
-		for (size_t i = 0; i < fingers.size(); i++) // draw coordinates
+		if (fingers.size() != 0) // delete outdated fingers
 		{
-			putText(source, fingers.at(i)->get_info(), CvPoint(fingers.at(i)->get_pos()), FONT_HERSHEY_SIMPLEX, 0.5, cvScalar(255, 255, 255), 1);
+			
+			for (unsigned int k = 0; k < fingers.size(); k++)
+			{
 
+				if (3 < currentFrame - fingers.at(k)->get_frame()) // finger hasnt been updated for 5+ frames
+				{
+					
+					//delete fingers.at(k);
+					fingers.at(k)->deactivate();
+					
+
+				}
+			}
+			
+		}
+
+		
+
+		for (size_t i = 0; i < fingers.size(); i++) // draw coordinates and id
+		{
+
+			if (fingers.at(i)->get_active())
+			{
+				putText(source, fingers.at(i)->get_info(), CvPoint(fingers.at(i)->get_pos()), FONT_HERSHEY_SIMPLEX, 0.5, cvScalar(255, 255, 255), 1);
+			}
 		}
 
 		if (cv::waitKey(50) == 27) // wait for user input
@@ -182,14 +175,15 @@ int main(void)
 			break;
 		}
 
+
 		currentFrame++;
 
 		// time end
 		ms_end = clock();
 		ms_time = ms_end - ms_start;
 
-		putText(original, "frame #" + (std::string)_itoa(currentFrame, buffer, 10), cvPoint(0, 15), cv::FONT_HERSHEY_PLAIN, 1, CV_RGB(255, 255, 255), 1, 8); // write framecounter to the image (useful for debugging)
-		putText(original, "time per frame: " + (std::string)_itoa(ms_time, buffer, 10) + "ms", cvPoint(0, 30), cv::FONT_HERSHEY_PLAIN, 1, CV_RGB(255, 255, 255), 1, 8); // write calculation time per frame to the image
+		putText(source, "frame #" + (std::string)_itoa(currentFrame, buffer, 10), cvPoint(0, 15), cv::FONT_HERSHEY_PLAIN, 1, CV_RGB(255, 255, 255), 1, 8); // write framecounter to the image (useful for debugging)
+		putText(source, "time per frame: " + (std::string)_itoa(ms_time, buffer, 10) + "ms", cvPoint(0, 30), cv::FONT_HERSHEY_PLAIN, 1, CV_RGB(255, 255, 255), 1, 8); // write calculation time per frame to the image
 	
 		imshow("window", source); // render the frame to a window	
 	}

@@ -18,6 +18,9 @@ public:
 	string get_info();
 	Point2f get_pos();
 
+	void deactivate();
+	bool get_active();
+
 	void update(Point2f, int);
 
 	static int counter;
@@ -28,6 +31,8 @@ private:
 	int frame;
 	int id;
 
-	const int radius = 20;
+	bool active;
+
+	const int radius = 30;
 };
 

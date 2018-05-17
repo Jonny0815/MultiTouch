@@ -33,6 +33,8 @@ float Finger::get_distance(Point2f coor_h)
 		return result;
 	}
 
+	active = true;
+
 }
 
 int Finger::get_frame()
@@ -42,13 +44,23 @@ int Finger::get_frame()
 
 string Finger::get_info()
 {
-	string tbr = "X:" + to_string(x) + "Y:" + to_string(y) + "ID:" + to_string(id);
+	string tbr = "ID:" + to_string(id);
 	return tbr;
 }
 
 Point2f Finger::get_pos()
 {
 	return Point2f(x,y);
+}
+
+void Finger::deactivate()
+{
+	active = false;
+}
+
+bool Finger::get_active()
+{
+	return active;
 }
 
 void Finger::update(Point2f coor_h, int frame_h)
