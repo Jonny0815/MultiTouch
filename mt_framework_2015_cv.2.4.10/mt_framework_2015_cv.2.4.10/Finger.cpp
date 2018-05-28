@@ -7,6 +7,8 @@ Finger::Finger(Point2f coor_h, int frame_h) :id(counter++)
 	x = coor_h.x;
 	y = coor_h.y;
 
+	
+
 	frame = frame_h;
 
 }
@@ -61,6 +63,20 @@ void Finger::deactivate()
 bool Finger::get_active()
 {
 	return active;
+}
+
+int Finger::get_id()
+{
+	return id;
+}
+
+float Finger::get_x_norm(int framex)
+{
+	return x/framex;
+}
+
+float Finger::get_y_norm(int framey) {
+	return y / framey;
 }
 
 void Finger::update(Point2f coor_h, int frame_h)

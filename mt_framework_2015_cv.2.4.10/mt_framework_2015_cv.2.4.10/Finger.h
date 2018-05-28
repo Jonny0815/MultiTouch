@@ -1,6 +1,7 @@
 #pragma once
 
 #include "opencv2/opencv.hpp"
+#include "TuioCursor.h"
 #include <vector>
 #include <string>
 
@@ -20,14 +21,18 @@ public:
 
 	void deactivate();
 	bool get_active();
+	int get_id();
+
+	float get_x_norm(int);
+	float get_y_norm(int);
 
 	void update(Point2f, int);
 
 	static int counter;
 
 private:
-	int x;
-	int y;
+	float x;
+	float y;
 	int frame;
 	int id;
 

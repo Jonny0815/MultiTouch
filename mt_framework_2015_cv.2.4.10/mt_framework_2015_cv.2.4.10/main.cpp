@@ -10,8 +10,12 @@
 #include <vector>
 #include "Finger.h"
 
+#include "TuioServer.h"
+#include "TuioCursor.h"
+
 using namespace std;
 using namespace cv;
+using namespace TUIO;
 
 int main(void)
 {
@@ -53,6 +57,11 @@ int main(void)
 	char buffer[10]; // buffer for int to ascii conversion -> itoa(...)
 
 	cap >> background;
+
+
+	TuioServer* ts = new TuioServer();
+
+
 
 	for (;;)
 	{
@@ -122,16 +131,29 @@ int main(void)
 						if (best_match != nullptr)
 						{
 							best_match->update(rr.center, currentFrame);
+
+							//ts->updateTuioCursor(ts->getClosestTuioCursor(best_match->get_pos().x, best_match->get_pos().y), rr.center.x, rr.center.y);
+							
 						}
 						else
 						{
-							fingers.push_back(new Finger(rr.center, currentFrame));
+							Finger* tmp_f = new Finger(rr.center, currentFrame);
+
+							fingers.push_back(tmp_f);
+							//ts->addExternalTuioCursor(new TuioCursor(tmp_f->get_id(), tmp_f->get_id(),tmp_f->get_pos().x, tmp_f->get_pos().y));
+
 						}
 						
 
+
 					}
 					else {
-						fingers.push_back(new Finger(rr.center, currentFrame));
+						Finger* tmp_f = new Finger(rr.center, currentFrame);
+
+						fingers.push_back(tmp_f);
+						//ts->addExternalTuioCursor(new TuioCursor(tmp_f->get_id(), tmp_f->get_id(), tmp_f->get_pos().x, tmp_f->get_pos().y));
+
+					
 					}
 
 				}
@@ -151,6 +173,7 @@ int main(void)
 					
 					//delete fingers.at(k);
 					fingers.at(k)->deactivate();
+					//ts->removeTuioCursor(ts->getClosestTuioCursor(fingers.at(k)->get_pos().x, fingers.at(k)->get_pos().y));
 					
 
 				}
@@ -169,6 +192,37 @@ int main(void)
 			}
 		}
 
+
+	
+
+		for (size_t i = 0; i < fingers.size(); i++)
+		{
+			if (fingers.at(i)->get_active())
+			{
+				if (ts->getTuioCursor(fingers.at(i)->get_id()) != NULL)
+				{
+					ts->updateTuioCursor(ts->getTuioCursor(fingers.at(i)->get_id()), fingers.at(i)->get_x_norm(frame.size().width), fingers.at(i)->get_y_norm(frame.size().height));
+				}
+				else {
+
+						ts->addExternalTuioCursor(new TuioCursor(fingers.at(i)->get_id(),0, fingers.at(i)->get_x_norm(frame.size().width), fingers.at(i)->get_y_norm(frame.size().height)));
+
+					
+
+				}
+			}
+			else {
+
+				if (ts->getTuioCursor(fingers.at(i)->get_id()) != NULL)
+				{
+					ts->removeTuioCursor(ts->getTuioCursor(fingers.at(i)->get_id()));
+				}
+
+			}
+		}
+
+
+
 		if (cv::waitKey(50) == 27) // wait for user input
 		{
 			std::cout << "TERMINATION: User pressed ESC\n";
@@ -177,6 +231,11 @@ int main(void)
 
 
 		currentFrame++;
+
+
+
+		ts->initFrame(TUIO::TuioTime::getSessionTime());
+		ts->sendFullMessages();
 
 		// time end
 		ms_end = clock();
