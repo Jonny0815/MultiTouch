@@ -1,6 +1,7 @@
 ﻿  main.cpp
+c:\users\jonny0815\source\repos\multitouch\mt_framework_2015_cv.2.4.10\mt_framework_2015_cv.2.4.10\main.cpp(83): warning C4129: 'i': unrecognized character escape sequence
   Generating code
-  1 of 510 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+  1 of 424 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
