@@ -1,18 +1,27 @@
 #include <iostream>
 #include <process.h>
+#include <vector>
 
 #include "TuioClient.h"
 #include "TuioListener.h"
 
+
 #include <GL/glut.h>
 
+
 using namespace TUIO;
+using namespace std;
 
 TUIO::TuioClient *tuioClient; // global tuioClient for testing
+
+int window_size_x;
+int window_size_y;
+
 
 class Client : public TuioListener {
 	// these methods need to be implemented here since they're virtual methods
 	// these methods will be called whenever a new package is received
+
 
 	void Client::addTuioObject(TuioObject *tobj){};
 	void Client::updateTuioObject(TuioObject *tobj){};
@@ -20,7 +29,8 @@ class Client : public TuioListener {
 	
 	void Client::addTuioCursor(TuioCursor *tcur)
 	{
-		//std::cout << "new finger detected: (id=" << tcur->getSessionID() << ", coordinates=" << tcur->getX() << "," << tcur->getY() << ")\n";
+		std::cout << "new finger detected: (id=" << tcur->getSessionID() << ", coordinates=" << tcur->getX() << "," << tcur->getY() << ")\n";
+		
 	};
 	void Client::updateTuioCursor(TuioCursor *tcur){};
 	void Client::removeTuioCursor(TuioCursor *tcur){};
@@ -40,7 +50,9 @@ void draw()
 
 	for (std::list<TuioCursor*>::iterator cursorListIter = cursorList.begin(); cursorListIter != cursorList.end(); ++cursorListIter)
 	{
-		std::cout << "id: " << (*cursorListIter)->getCursorID() << "\n";
+		std::cout << "id: " << (*cursorListIter)->getSessionID() << "\n";
+
+		
 
 		// do things with the cursors
 		// [...]
@@ -67,6 +79,11 @@ void glInit()
 
 int main(int argc, char** argv)
 {
+
+	window_size_x = 752;
+	window_size_y = 480;
+
+
 	// create a second thread for the TUIO listener
 	HANDLE hThread_TUIO;
 	unsigned threadID;
@@ -75,7 +92,7 @@ int main(int argc, char** argv)
 
 	// GLUT Window Initialization (just an example):
 	glutInit(&argc, argv);
-	glutInitWindowSize(752, 480);
+	glutInitWindowSize(window_size_x, window_size_y);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutCreateWindow("TUIO Client Example (GLUT Window)");
 

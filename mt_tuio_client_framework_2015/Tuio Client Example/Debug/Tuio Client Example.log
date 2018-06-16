@@ -1,11 +1,3 @@
-﻿  NetworkingUtils.cpp
-  UdpSocket.cpp
-  OscReceivedElements.cpp
-  TuioClient.cpp
-  TuioTime.cpp
-c:\users\jonny0815\downloads\mt_tuio_client_framework_2015\mt_tuio_client_framework_2015\tuio_cpp\oscpack\ip\win32\networkingutils.cpp(80): warning C4996: 'gethostbyname': Use getaddrinfo() or GetAddrInfoW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
-  c:\program files (x86)\windows kits\10\include\10.0.17134.0\um\winsock2.h(2218): note: see declaration of 'gethostbyname'
-  main.cpp
-c:\users\jonny0815\downloads\mt_tuio_client_framework_2015\mt_tuio_client_framework_2015\tuio_cpp\tuio\tuioclient.cpp(83): warning C4101: 'e': unreferenced local variable
-c:\users\jonny0815\downloads\mt_tuio_client_framework_2015\mt_tuio_client_framework_2015\tuio client example\main.cpp(72): warning C4101: 'threadID': unreferenced local variable
-  Tuio Client Example.vcxproj -> C:\Users\Jonny0815\Downloads\mt_tuio_client_framework_2015\mt_tuio_client_framework_2015\Debug\Tuio Client Example.exe
+﻿  main.cpp
+c:\users\jonny0815\source\repos\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(93): warning C4101: 'threadID': unreferenced local variable
+  Tuio Client Example.vcxproj -> C:\Users\Jonny0815\Source\Repos\MultiTouch\mt_tuio_client_framework_2015\Debug\Tuio Client Example.exe

@@ -1,0 +1,13 @@
+{
+  "User": {
+    "Id": 434,
+    "Username": "stjohitz",
+    "Name": "stjohitz",
+    "Email": "johannes.hitzinger@stud.h-da.de",
+    "AvatarUrl": "https://secure.gravatar.com/avatar/19cf2bf2bf8ac45cdca3c7faaee77744?s=80&d=identicon",
+    "PrivateToken": "2ef1995d58ecf467a4c8a501aa614e28888b807d6c4fbf3619003c87f787b57d",
+    "Host": "https://code.fbi.h-da.de/",
+    "TwoFactorEnabled": false,
+    "ApiVersion": 3
+  }
+}
