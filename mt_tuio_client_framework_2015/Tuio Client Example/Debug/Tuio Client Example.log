@@ -1,3 +1,3 @@
 ﻿  main.cpp
-c:\users\jonny0815\source\repos\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(93): warning C4101: 'threadID': unreferenced local variable
-  Tuio Client Example.vcxproj -> C:\Users\Jonny0815\Source\Repos\MultiTouch\mt_tuio_client_framework_2015\Debug\Tuio Client Example.exe
+c:\users\sven schurig\desktop\mt_tuio_client_framework_2015\tuio client example\main.cpp(95): warning C4101: "threadID": Unreferenzierte lokale Variable
+  Tuio Client Example.vcxproj -> C:\Users\Sven Schurig\Desktop\mt_tuio_client_framework_2015\Debug\Tuio Client Example.exe
