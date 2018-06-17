@@ -1,0 +1,35 @@
+﻿  NetworkingUtils.cpp
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\ip\win32\networkingutils.cpp(80): warning C4996: 'gethostbyname': Use getaddrinfo() or GetAddrInfoW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\10\include\10.0.16299.0\um\winsock2.h(2218): note: Siehe Deklaration von "gethostbyname"
+  UdpSocket.cpp
+  OscOutboundPacketStream.cpp
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(197): warning C4244: "Initialisierung": Konvertierung von "__int64" in "osc::uint32", möglicher Datenverlust
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(225): warning C4267: "Argument": Konvertierung von "size_t" nach "long", Datenverlust möglich
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(236): warning C4244: "Argument": Konvertierung von "__int64" in "long", möglicher Datenverlust
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(236): warning C4244: "Initialisierung": Konvertierung von "__int64" in "unsigned long", möglicher Datenverlust
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(255): warning C4244: "return": Konvertierung von "__int64" in "unsigned int", möglicher Datenverlust
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(261): warning C4244: "Initialisierung": Konvertierung von "__int64" in "unsigned int", möglicher Datenverlust
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(265): warning C4244: "Argument": Konvertierung von "__int64" in "long", möglicher Datenverlust
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(339): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.16299.0\ucrt\string.h(132): note: Siehe Deklaration von "strcpy"
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(340): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "unsigned long", Datenverlust möglich
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(366): warning C4244: "Initialisierung": Konvertierung von "__int64" in "int", möglicher Datenverlust
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(376): warning C4244: "Initialisierung": Konvertierung von "__int64" in "osc::uint32", möglicher Datenverlust
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(578): warning C4267: "Argument": Konvertierung von "size_t" nach "long", Datenverlust möglich
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(581): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.16299.0\ucrt\string.h(132): note: Siehe Deklaration von "strcpy"
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(582): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "unsigned long", Datenverlust möglich
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(598): warning C4267: "Argument": Konvertierung von "size_t" nach "long", Datenverlust möglich
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(601): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.16299.0\ucrt\string.h(132): note: Siehe Deklaration von "strcpy"
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\oscpack\osc\oscoutboundpacketstream.cpp(602): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "unsigned long", Datenverlust möglich
+  OscTypes.cpp
+  TuioServer.cpp
+c:\users\sven schurig\desktop\multitouch-p2_new\mt_framework_2015_cv.2.4.10\tuio\tuioserver.cpp(182): warning C4101: "e": Unreferenzierte lokale Variable
+  TuioTime.cpp
+  Finger.cpp
+  main.cpp
+  Code wird generiert.
+  All 643 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Codegenerierung ist abgeschlossen.
+  mt_framework_2015_cv.2.4.10.vcxproj -> C:\Users\Sven Schurig\Desktop\MultiTouch-p2_new\mt_framework_2015_cv.2.4.10\x64\Release\mt_framework_2015_cv.2.4.10.exe
