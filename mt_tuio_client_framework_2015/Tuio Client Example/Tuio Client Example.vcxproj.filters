@@ -19,6 +19,9 @@
     <Filter Include="Source Files\oscpack">
       <UniqueIdentifier>{c5ec517f-98ad-4ea2-b4ae-453075c53281}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\geasture">
+      <UniqueIdentifier>{86ad346a-c316-4366-b676-486a4bbecf4f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,8 +42,51 @@
     <ClCompile Include="..\TUIO_CPP\TUIO\TuioTime.cpp">
       <Filter>Source Files\TUIO</Filter>
     </ClCompile>
+    <ClCompile Include="..\geasture\include\GeometricRecognizer.cpp">
+      <Filter>Source Files\geasture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="..\geasture\include\GeometricRecognizer.cpp~">
+      <Filter>Source Files\geasture</Filter>
+    </None>
+    <None Include="..\geasture\include\GeometricRecognizer.h~">
+      <Filter>Source Files\geasture</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\geasture\include\GeometricRecognizer.h">
+      <Filter>Source Files\geasture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\geasture\include\GeometricRecognizerTypes.h">
+      <Filter>Source Files\geasture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\geasture\include\GestureTemplate.h">
+      <Filter>Source Files\geasture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\geasture\include\MultipleStrokeGestureTemplate.h">
+      <Filter>Source Files\geasture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\geasture\include\PathWriter.h">
+      <Filter>Source Files\geasture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\geasture\include\SampleGestures.h">
+      <Filter>Source Files\geasture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\geasture\include\SampleMultiStrokeGestures.h">
+      <Filter>Source Files\geasture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\geasture\include\utils.h">
+      <Filter>Source Files\geasture</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Tuio Client Example.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

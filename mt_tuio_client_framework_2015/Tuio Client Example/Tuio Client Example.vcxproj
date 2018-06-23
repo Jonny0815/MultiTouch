@@ -81,6 +81,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\geasture\include\GeometricRecognizer.cpp" />
     <ClCompile Include="..\TUIO_CPP\oscpack\ip\win32\NetworkingUtils.cpp" />
     <ClCompile Include="..\TUIO_CPP\oscpack\ip\win32\UdpSocket.cpp" />
     <ClCompile Include="..\TUIO_CPP\oscpack\osc\OscReceivedElements.cpp" />
@@ -89,7 +90,23 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\geasture\include\GeometricRecognizer.cpp~" />
+    <None Include="..\geasture\include\GeometricRecognizer.h~" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\geasture\include\GeometricRecognizer.h" />
+    <ClInclude Include="..\geasture\include\GeometricRecognizerTypes.h" />
+    <ClInclude Include="..\geasture\include\GestureTemplate.h" />
+    <ClInclude Include="..\geasture\include\MultipleStrokeGestureTemplate.h" />
+    <ClInclude Include="..\geasture\include\PathWriter.h" />
+    <ClInclude Include="..\geasture\include\SampleGestures.h" />
+    <ClInclude Include="..\geasture\include\SampleMultiStrokeGestures.h" />
+    <ClInclude Include="..\geasture\include\utils.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Tuio Client Example.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
