@@ -19,8 +19,7 @@ using namespace std;
 using namespace sf;
 using namespace DollarRecognizer;
 
-utils util;
-int o;
+
 
 struct Pfade
 {
@@ -29,12 +28,23 @@ struct Pfade
 
 };
 
+struct Objekt {
+	
+	string typ;
+	double x;
+	double y;
+
+};
+
+utils util;
+int o;
+int hoehe = 600;
+int breite = 800;
 
 Pfade xGesten;
+vector<Objekt> objekte;
 
 TUIO::TuioClient *tuioClient; // global tuioClient for testing
-
-
 
 class Client : public TuioListener {
 	// these methods need to be implemented here since they're virtual methods
@@ -55,11 +65,71 @@ class Client : public TuioListener {
 };
 
 
+constexpr
+unsigned int xhash(const char* str, int h = 0)
+{
+	return !str[h] ? 5381 : (xhash(str, h + 1) * 33) ^ str[h];	
+}
+
+void drawStar() {
+	glBegin(GL_POLYGON);
+	glColor3f(1, 1, 0);
+	glVertex2f(0.0, 0.2);
+	glVertex2f(0.1, 0.1);
+	glVertex2f(0.2, 0.05);
+	glVertex2f(0.1, 0.0);
+	glVertex2f(0.2, -0.1);
+	glVertex2f(0.0, 0.0);
+	glVertex2f(-0.2, -0.1);
+	glVertex2f(-0.1, 0.0);
+	glVertex2f(-0.2, 0.05);
+	glVertex2f(-0.1, 0.1);
+	glEnd();
+	glFlush();
+}
+
+
+void drawCircle(float posx, float posy) {
+
+	glBegin(GL_POLYGON);
+	for (int ii = 0; ii < 200; ii++)
+	{
+		float theta = 2.0f * 3.1415926f * float(ii) / float(200);//get the current angle
+
+		float x = 0.2 * cosf(theta);//calculate the x component
+		float y = 0.2 * sinf(theta);//calculate the y component
+
+		glVertex2f(x + posx,y + posy);//output vertex
+
+	}
+	glEnd();
+	glFlush();
+}
+
+
+
+void drawRectangel() {
+	glRectd(0.2, 0.2, -0.2, -0.2);
+	glFlush();
+}
+
+void drawTriangel(float posX, float posY) {
+	glBegin(GL_TRIANGLES);
+	glColor3f(1, 0, 0); // red
+	glVertex2f(-0.2 + posX, -0.2 + posY);
+	glColor3f(0, 1, 0); // green
+	glVertex2f(0.2+ posX, -0.2 + posY);
+	glColor3f(0, 0, 1); // blue
+	glVertex2f(0 + posX, 0.3 + posY);
+	glEnd();
+	glFlush();
+}
+
 void draw()
 {
 	// openGL draw function
 	std::list<TuioCursor*> cursorList;
-
+	std::list<TuioCursor*> drawings;
 	// get the actual cursor list from the tuioClient
 	tuioClient->lockCursorList();
 	cursorList = tuioClient->getTuioCursors();
@@ -78,6 +148,8 @@ void draw()
 		int id = (int)(*cursorListIter)->getCursorID();
 		double x= (double)(*cursorListIter)->getX();
 		double y = (double)(*cursorListIter)->getY();
+		list<TuioPoint> points = (*cursorListIter)->getPath();
+		bool first = true;
 
 		if (id >= 0) {
 			// Frames speichern
@@ -90,9 +162,22 @@ void draw()
 
 		}
 
-		glBegin(GL_POINTS);
+		
+
+		glBegin(GL_LINE_STRIP);
 		glColor3f(1, 0, 0);
-		glVertex2f((*cursorListIter)->getX(), (*cursorListIter)->getY());
+
+
+
+		for (std::list<TuioPoint>::iterator it = points.begin(); it != points.end(); ++it)
+		{
+			
+				glVertex2f(((*it).getX() - 0.5) * 2, (((*it).getY()) - 0.5) * (-2));
+			
+			
+		}
+
+		
 		glEnd();
 
 
@@ -135,12 +220,10 @@ X
 */
 			vector<string> gesturesList;
 			gesturesList.push_back("Circle"); // Verfügbare Gesten
-			gesturesList.push_back("LeftToRightLine");
-			gesturesList.push_back("RightToLeftLine");
 			gesturesList.push_back("V");
 			gesturesList.push_back("Triangle");
 			gesturesList.push_back("CheckMark");
-			gesturesList.push_back("Spiral");
+			gesturesList.push_back("Star");
 			gesturesList.push_back("Rectangle");
 			gesturesList.push_back("0");		// muss immer am Ende sein
 			g.activateTemplates(gesturesList);
@@ -148,7 +231,59 @@ X
 			RecognitionResult r = g.recognize(xGesten.gesten[j]);
 			cout << "Recognized gesture: " << r.name << endl;
 			cout << "1$ Score:" << r.score << endl;
-			Sleep(500);
+			//Sleep(4000);
+
+			
+
+			if (r.score > 0.4) {
+				Objekt oTemp;
+				switch (xhash(r.name.c_str()))
+				{
+				case xhash("Star"):
+					
+					oTemp.typ = "Star";
+					oTemp.x = 0;
+					oTemp.y = 0;
+
+					objekte.push_back(oTemp);
+					
+					break;
+				case xhash("Circle"):
+
+					oTemp.typ = "Circle";
+					oTemp.x = 0;
+					oTemp.y = 0;
+
+					objekte.push_back(oTemp);
+
+					break;
+
+				case xhash("Rectangle"):
+
+					oTemp.typ = "Rectangle";
+					oTemp.x = 0;
+					oTemp.y = 0;
+
+					objekte.push_back(oTemp);
+
+					break;
+				case xhash("Triangle"):
+
+					oTemp.typ = "Triangle";
+					oTemp.x = 0;
+					oTemp.y = 0;
+
+					objekte.push_back(oTemp);
+
+					break;
+				default:
+					cout << "Fehler Objekt nicht erkannt" << endl;
+					break;
+				}
+			
+			}
+				
+			
 
 
 			cout << "alten Fingerverlauf loeschen" << endl;
@@ -158,6 +293,33 @@ X
 			
 		}
 		
+	}
+
+	// Gespeicherte Objekte zeichnen
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Bild Buffer löchen
+
+	for (int i = 0; i < objekte.size(); i++)
+	{
+		string typ = objekte.at(i).typ;
+
+		switch (xhash(typ.c_str()))
+		{
+			case xhash("Star") :
+				drawStar();
+				break;
+			case xhash("Rectangle"):
+				drawRectangel();
+				break;
+			case xhash("Triangle") :
+				drawTriangel(objekte.at(i).x, objekte.at(i).y);
+				break;
+			case xhash("Circle"):
+				drawCircle(0,0);
+				break;
+		default:
+			break;
+		}
+
 	}
 
 	glutSwapBuffers();
@@ -349,7 +511,7 @@ int main(int argc, char** argv)
 	
 	// GLUT Window Initialization (just an example):
 	glutInit(&argc, argv);
-	glutInitWindowSize(800, 600);
+	glutInitWindowSize(breite , hoehe);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutCreateWindow("MultiTouchGame Johannes, Sven");
 

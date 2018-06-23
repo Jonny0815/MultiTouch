@@ -1,3 +1,28 @@
 ﻿  main.cpp
-d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(345): warning C4101: "threadID": Unreferenzierte lokale Variable
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(77): warning C4305: "Argument": Verkürzung von "double" in "GLfloat"
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(78): warning C4305: "Argument": Verkürzung von "double" in "GLfloat"
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(79): warning C4305: "Argument": Verkürzung von "double" in "GLfloat"
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(80): warning C4305: "Argument": Verkürzung von "double" in "GLfloat"
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(81): warning C4305: "Argument": Verkürzung von "double" in "GLfloat"
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(83): warning C4305: "Argument": Verkürzung von "double" in "GLfloat"
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(84): warning C4305: "Argument": Verkürzung von "double" in "GLfloat"
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(85): warning C4305: "Argument": Verkürzung von "double" in "GLfloat"
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(86): warning C4305: "Argument": Verkürzung von "double" in "GLfloat"
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(99): warning C4244: "Initialisierung": Konvertierung von "double" in "float", möglicher Datenverlust
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(100): warning C4244: "Initialisierung": Konvertierung von "double" in "float", möglicher Datenverlust
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(119): warning C4244: "Argument": Konvertierung von "double" in "GLfloat", möglicher Datenverlust
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(121): warning C4244: "Argument": Konvertierung von "double" in "GLfloat", möglicher Datenverlust
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(123): warning C4244: "Argument": Konvertierung von "double" in "GLfloat", möglicher Datenverlust
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(175): warning C4244: "Argument": Konvertierung von "double" in "GLfloat", möglicher Datenverlust
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(242): warning C4307: "*": Überlauf einer ganzzahligen Konstanten
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(251): warning C4307: "*": Überlauf einer ganzzahligen Konstanten
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(261): warning C4307: "*": Überlauf einer ganzzahligen Konstanten
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(270): warning C4307: "*": Überlauf einer ganzzahligen Konstanten
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(301): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(307): warning C4307: "*": Überlauf einer ganzzahligen Konstanten
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(310): warning C4307: "*": Überlauf einer ganzzahligen Konstanten
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(313): warning C4307: "*": Überlauf einer ganzzahligen Konstanten
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(314): warning C4244: "Argument": Konvertierung von "double" in "float", möglicher Datenverlust
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(316): warning C4307: "*": Überlauf einer ganzzahligen Konstanten
+d:\users\sven schurig\documents\code\unni\multitouch\multitouch\mt_tuio_client_framework_2015\tuio client example\main.cpp(507): warning C4101: "threadID": Unreferenzierte lokale Variable
   Tuio Client Example.vcxproj -> D:\Users\Sven Schurig\Documents\code\unni\Multitouch\MultiTouch\mt_tuio_client_framework_2015\Debug\Tuio Client Example.exe
