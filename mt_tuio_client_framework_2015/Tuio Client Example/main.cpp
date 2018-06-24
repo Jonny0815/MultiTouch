@@ -6,6 +6,7 @@
 #include <time.h>
 #include <Windows.h>
 
+
 #include "TuioClient.h"
 #include "TuioListener.h"
 
@@ -37,9 +38,14 @@ struct Objekt {
 };
 
 utils util;
-int o;
-int hoehe = 600;
-int breite = 800;
+int hoehe = 530;
+int breite = 630;
+
+bool tragging = false;
+int traggingobjid = 0;
+bool drawing = false;
+
+
 
 Pfade xGesten;
 vector<Objekt> objekte;
@@ -59,7 +65,20 @@ class Client : public TuioListener {
 		//std::cout << "new finger detected: (id=" << tcur->getSessionID() << ", coordinates=" << tcur->getX() << "," << tcur->getY() << ")\n";
 	};
 	void Client::updateTuioCursor(TuioCursor *tcur){};
-	void Client::removeTuioCursor(TuioCursor *tcur){};
+	void Client::removeTuioCursor(TuioCursor *tcur){
+	
+
+
+		if (tragging)
+		{
+			tragging = false;
+			drawing = false;
+		}
+		
+		
+		traggingobjid = 0;
+
+	};
 
 	void  Client::refresh(TuioTime frameTime){};
 };
@@ -71,7 +90,48 @@ unsigned int xhash(const char* str, int h = 0)
 	return !str[h] ? 5381 : (xhash(str, h + 1) * 33) ^ str[h];	
 }
 
-void drawStar() {
+//new
+
+
+void drawCircle(float posx, float posy) {
+
+	glBegin(GL_POLYGON);
+	glColor3f(1, 0, 1); 
+	for (int ii = 0; ii < 200; ii++)
+	{
+		float theta = 2.0f * 3.1415926f * float(ii) / float(200);//get the current angle
+
+		float x = 0.2 * cosf(theta);//calculate the x component
+		float y = 0.2 * sinf(theta);//calculate the y component
+
+		glVertex2f(x + posx, y + posy);//output vertex
+
+	}
+	glEnd();
+	glFlush();
+}
+
+
+
+void drawTriangel(float posX, float posY) {
+	glBegin(GL_TRIANGLES);
+	glColor3f(1, 0, 0); // red
+	glVertex2f(-0.2 + posX, -0.2 + posY);
+	glColor3f(0, 1, 0); // green
+	glVertex2f(0.2 + posX, -0.2 + posY);
+	glColor3f(0, 0, 1); // blue
+	glVertex2f(0 + posX, 0.3 + posY);
+	glEnd();
+	glFlush();
+}
+
+
+// old
+
+void drawStar(float translateX, float translateY) {
+	glPushMatrix();
+	glColor3f(1, 1, 0);
+	glTranslatef(translateX, translateY, 0);
 	glBegin(GL_POLYGON);
 	glColor3f(1, 1, 0);
 	glVertex2f(0.0, 0.2);
@@ -86,44 +146,51 @@ void drawStar() {
 	glVertex2f(-0.1, 0.1);
 	glEnd();
 	glFlush();
+	glPopMatrix();
 }
 
+bool isInObject(double fingerX, double fingerY, double objectX, double objectY, double radius) {
+	
 
-void drawCircle(float posx, float posy) {
+	double diffX = fabs((fingerX + 10) - (objectX + 10));
+	double diffY = fabs((fingerY + 10) - (objectY + 10));
 
-	glBegin(GL_POLYGON);
-	for (int ii = 0; ii < 200; ii++)
-	{
-		float theta = 2.0f * 3.1415926f * float(ii) / float(200);//get the current angle
-
-		float x = 0.2 * cosf(theta);//calculate the x component
-		float y = 0.2 * sinf(theta);//calculate the y component
-
-		glVertex2f(x + posx,y + posy);//output vertex
-
+	if (diffX <= radius && diffY <= radius) {
+		cout << "Finger in Object" << endl;
+		//Sleep(5000); 
+		return true;
 	}
-	glEnd();
-	glFlush();
+
+	return false;
+	
+	/*
+	if ((fabs(fingerX - objectX)) <=  radius && (fabs(fingerY - objectY)) <= radius) {
+		cout << "Finger in Object" << endl;
+		//Sleep(5000);
+		return true;
+	}
+	*/
+	
+
+
+
+	return false;
+}
+
+float getRandomBtw() {
+	return ((((float)(rand() % 100)) / 100) * 2) - 1;
 }
 
 
-
-void drawRectangel() {
+void drawRectangel(float translateX, float translateY) {
+	glPushMatrix();
+	glColor3f(1, 0, 0);
+	glTranslatef(translateX, translateY, 0);
 	glRectd(0.2, 0.2, -0.2, -0.2);
 	glFlush();
+	glPopMatrix();
 }
 
-void drawTriangel(float posX, float posY) {
-	glBegin(GL_TRIANGLES);
-	glColor3f(1, 0, 0); // red
-	glVertex2f(-0.2 + posX, -0.2 + posY);
-	glColor3f(0, 1, 0); // green
-	glVertex2f(0.2+ posX, -0.2 + posY);
-	glColor3f(0, 0, 1); // blue
-	glVertex2f(0 + posX, 0.3 + posY);
-	glEnd();
-	glFlush();
-}
 
 void draw()
 {
@@ -147,8 +214,10 @@ void draw()
 
 		int id = (int)(*cursorListIter)->getCursorID();
 		double x= (double)(*cursorListIter)->getX();
-		double y = (double)(*cursorListIter)->getY();
+		double y = ((double)(*cursorListIter)->getY());
+		tuioClient->lockCursorList();
 		list<TuioPoint> points = (*cursorListIter)->getPath();
+		tuioClient->unlockCursorList();
 		bool first = true;
 
 		if (id >= 0) {
@@ -162,12 +231,10 @@ void draw()
 
 		}
 
-		
-
+		// Pfad zeichnen
+		glPushMatrix();
 		glBegin(GL_LINE_STRIP);
-		glColor3f(1, 0, 0);
-
-
+		glColor3f(0, 0, 1);
 
 		for (std::list<TuioPoint>::iterator it = points.begin(); it != points.end(); ++it)
 		{
@@ -176,9 +243,70 @@ void draw()
 			
 			
 		}
-
 		
 		glEnd();
+		glPopMatrix();
+
+
+
+		// erkennen ob Geste in einem Objekt beginnt
+
+		if (!objekte.empty()) {
+		
+
+			if (!tragging && drawing)
+			{
+				for (int i = 0; i < objekte.size(); i++)
+				{
+
+					
+					if (isInObject(((*points.begin()).getX() - 0.5) * 2, ((*points.begin()).getY() - 0.5)*(-2), objekte.at(i).x, objekte.at(i).y, 0.30)) {
+
+						cout << "found object !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+
+						drawing = false;
+						tragging = true;
+						traggingobjid = i;
+
+
+						Objekt temp;
+						temp.typ = objekte.at(i).typ;
+						temp.x = (x - 0.5) * 2;
+						temp.y = (y - 0.5) * (-2);//(((*points.begin()).getY()) - 0.5) * 2;
+
+						objekte.erase(objekte.begin() + i);
+						objekte.push_back(temp);
+
+					}
+					else {
+
+						drawing = true;
+						tragging = false;
+
+					}
+
+
+				}
+			}
+			else {
+
+				tragging = true;
+
+				Objekt temp;
+				temp.typ = objekte.at(traggingobjid).typ;
+				temp.x = (x - 0.5) * 2;
+				temp.y = (y - 0.5) * (-2);//(((*points.begin()).getY()) - 0.5) * 2;
+
+				objekte.erase(objekte.begin() + traggingobjid);
+				objekte.push_back(temp);
+
+
+			}
+
+			
+		
+		}
+		else { drawing = true; }
 
 
 	}
@@ -186,7 +314,8 @@ void draw()
 
 	for (int j = 0; j < 100; j++) {
 		if (!xGesten.gesetzt[j] && !xGesten.gesten[j].empty()) {
-			// Geste erkennen
+			
+			// REMOVE OLD GEASTURE
 
 			GeometricRecognizer g;
 			g.loadTemplates();
@@ -236,14 +365,28 @@ X
 			
 
 			if (r.score > 0.4) {
-				Objekt oTemp;
+				Objekt oTemp;	
+
+				/*for (int  i = 0; i < 10; i++)
+				{
+					float x = ((((float)(rand() % 100))/100)*2)-1;
+					cout << "ZUfall " <<  x  << endl;
+				}
+
+				*/
+				
+				cout << "Typ:" << r.name << endl;
+
+				if(drawing){
 				switch (xhash(r.name.c_str()))
 				{
 				case xhash("Star"):
 					
 					oTemp.typ = "Star";
-					oTemp.x = 0;
-					oTemp.y = 0;
+					oTemp.x = getRandomBtw();
+					oTemp.y = getRandomBtw()*(-1);
+					
+					
 
 					objekte.push_back(oTemp);
 					
@@ -251,8 +394,11 @@ X
 				case xhash("Circle"):
 
 					oTemp.typ = "Circle";
-					oTemp.x = 0;
-					oTemp.y = 0;
+					oTemp.x = getRandomBtw();
+					oTemp.y = getRandomBtw()*(-1);
+
+					cout << "Circle : X: " << oTemp.x << "Y: "<<oTemp.y << endl;
+					//Sleep(2000);
 
 					objekte.push_back(oTemp);
 
@@ -261,8 +407,8 @@ X
 				case xhash("Rectangle"):
 
 					oTemp.typ = "Rectangle";
-					oTemp.x = 0;
-					oTemp.y = 0;
+					oTemp.x = getRandomBtw();
+					oTemp.y = getRandomBtw()*(-1);
 
 					objekte.push_back(oTemp);
 
@@ -270,8 +416,8 @@ X
 				case xhash("Triangle"):
 
 					oTemp.typ = "Triangle";
-					oTemp.x = 0;
-					oTemp.y = 0;
+					oTemp.x = getRandomBtw();
+					oTemp.y = getRandomBtw()*(-1);
 
 					objekte.push_back(oTemp);
 
@@ -280,6 +426,13 @@ X
 					cout << "Fehler Objekt nicht erkannt" << endl;
 					break;
 				}
+				}
+				
+				if (!tragging)
+				{
+					drawing = true;
+				}
+				//Sleep(2000);
 			
 			}
 				
@@ -302,19 +455,21 @@ X
 	{
 		string typ = objekte.at(i).typ;
 
+		
+
 		switch (xhash(typ.c_str()))
 		{
 			case xhash("Star") :
-				drawStar();
+				drawStar(objekte.at(i).x, objekte.at(i).y);
 				break;
 			case xhash("Rectangle"):
-				drawRectangel();
+				drawRectangel(objekte.at(i).x, objekte.at(i).y);
 				break;
 			case xhash("Triangle") :
 				drawTriangel(objekte.at(i).x, objekte.at(i).y);
 				break;
 			case xhash("Circle"):
-				drawCircle(0,0);
+				drawCircle(objekte.at(i).x, objekte.at(i).y);
 				break;
 		default:
 			break;
@@ -345,163 +500,14 @@ void glInit()
 {	
 }
 
-MultiStrokeGesture getGestureP()
-{
-	MultiStrokeGesture MultiStrokes;
-	MultiStrokes.push_back(util.addPointsToMakePath(Point2D(507, 8), Point2D(507, 87)));
-	MultiStrokes.push_back(util.addPointsToMakePath(Point2D(510, 7), Point2D(528, 7), Point2D(530, 8), Point2D(544, 10), Point2D(550, 12), Point2D(550, 15), Point2D(558, 20), Point2D(560, 22), Point2D(561, 27), Point2D(562, 33), Point2D(561, 37), Point2D(559, 42), Point2D(556, 45), Point2D(550, 48), Point2D(544, 51), Point2D(538, 53), Point2D(532, 54), Point2D(525, 55), Point2D(519, 55), Point2D(513, 55), Point2D(510, 55)));
-	return MultiStrokes;
-}
-
-Path2D sampleGest()
-{
-	Path2D path;
-	path.push_back(Point2D(68, 222));
-	path.push_back(Point2D(70, 220));
-	path.push_back(Point2D(73, 218));
-	path.push_back(Point2D(75, 217));
-	path.push_back(Point2D(77, 215));
-	path.push_back(Point2D(80, 213));
-	path.push_back(Point2D(82, 212));
-	path.push_back(Point2D(84, 210));
-	path.push_back(Point2D(87, 209));
-	path.push_back(Point2D(89, 208));
-	path.push_back(Point2D(92, 206));
-	path.push_back(Point2D(95, 204));
-	path.push_back(Point2D(101, 201));
-	path.push_back(Point2D(106, 198));
-	path.push_back(Point2D(112, 194));
-	path.push_back(Point2D(118, 191));
-	path.push_back(Point2D(124, 187));
-	path.push_back(Point2D(127, 186));
-	path.push_back(Point2D(132, 183));
-	path.push_back(Point2D(138, 181));
-	path.push_back(Point2D(141, 180));
-	path.push_back(Point2D(146, 178));
-	path.push_back(Point2D(154, 173));
-	path.push_back(Point2D(159, 171));
-	path.push_back(Point2D(161, 170));
-	path.push_back(Point2D(166, 167));
-	path.push_back(Point2D(168, 167));
-	path.push_back(Point2D(171, 166));
-	path.push_back(Point2D(174, 164));
-	path.push_back(Point2D(177, 162));
-	path.push_back(Point2D(180, 160));
-	path.push_back(Point2D(182, 158));
-	path.push_back(Point2D(183, 156));
-	path.push_back(Point2D(181, 154));
-	path.push_back(Point2D(178, 153));
-	path.push_back(Point2D(171, 153));
-	path.push_back(Point2D(164, 153));
-	path.push_back(Point2D(160, 153));
-	path.push_back(Point2D(150, 154));
-	path.push_back(Point2D(147, 155));
-	path.push_back(Point2D(141, 157));
-	path.push_back(Point2D(137, 158));
-	path.push_back(Point2D(135, 158));
-	path.push_back(Point2D(137, 158));
-	path.push_back(Point2D(140, 157));
-	path.push_back(Point2D(143, 156));
-	path.push_back(Point2D(151, 154));
-	path.push_back(Point2D(160, 152));
-	path.push_back(Point2D(170, 149));
-	path.push_back(Point2D(179, 147));
-	path.push_back(Point2D(185, 145));
-	path.push_back(Point2D(192, 144));
-	path.push_back(Point2D(196, 144));
-	path.push_back(Point2D(198, 144));
-	path.push_back(Point2D(200, 144));
-	path.push_back(Point2D(201, 147));
-	path.push_back(Point2D(199, 149));
-	path.push_back(Point2D(194, 157));
-	path.push_back(Point2D(191, 160));
-	path.push_back(Point2D(186, 167));
-	path.push_back(Point2D(180, 176));
-	path.push_back(Point2D(177, 179));
-	path.push_back(Point2D(171, 187));
-	path.push_back(Point2D(169, 189));
-	path.push_back(Point2D(165, 194));
-	path.push_back(Point2D(164, 196));
-
-	return path;
-}
-
-Path2D getGestureArrow()
-{
-	Path2D path;
-	path.push_back(Point2D(68, 222));
-	path.push_back(Point2D(70, 220));
-	path.push_back(Point2D(73, 218));
-	path.push_back(Point2D(75, 217));
-	path.push_back(Point2D(77, 215));
-	path.push_back(Point2D(80, 213));
-	path.push_back(Point2D(82, 212));
-	path.push_back(Point2D(84, 210));
-	path.push_back(Point2D(87, 209));
-	path.push_back(Point2D(89, 208));
-	path.push_back(Point2D(92, 206));
-	path.push_back(Point2D(95, 204));
-	path.push_back(Point2D(101, 201));
-	path.push_back(Point2D(106, 198));
-	path.push_back(Point2D(112, 194));
-	path.push_back(Point2D(118, 191));
-	path.push_back(Point2D(124, 187));
-	path.push_back(Point2D(127, 186));
-	path.push_back(Point2D(132, 183));
-	path.push_back(Point2D(138, 181));
-	path.push_back(Point2D(141, 180));
-	path.push_back(Point2D(146, 178));
-	path.push_back(Point2D(154, 173));
-	path.push_back(Point2D(159, 171));
-	path.push_back(Point2D(161, 170));
-	path.push_back(Point2D(166, 167));
-	path.push_back(Point2D(168, 167));
-	path.push_back(Point2D(171, 166));
-	path.push_back(Point2D(174, 164));
-	path.push_back(Point2D(177, 162));
-	path.push_back(Point2D(180, 160));
-	path.push_back(Point2D(182, 158));
-	path.push_back(Point2D(183, 156));
-	path.push_back(Point2D(181, 154));
-	path.push_back(Point2D(178, 153));
-	path.push_back(Point2D(171, 153));
-	path.push_back(Point2D(164, 153));
-	path.push_back(Point2D(160, 153));
-	path.push_back(Point2D(150, 154));
-	path.push_back(Point2D(147, 155));
-	path.push_back(Point2D(141, 157));
-	path.push_back(Point2D(137, 158));
-	path.push_back(Point2D(135, 158));
-	path.push_back(Point2D(137, 158));
-	path.push_back(Point2D(140, 157));
-	path.push_back(Point2D(143, 156));
-	path.push_back(Point2D(151, 154));
-	path.push_back(Point2D(160, 152));
-	path.push_back(Point2D(170, 149));
-	path.push_back(Point2D(179, 147));
-	path.push_back(Point2D(185, 145));
-	path.push_back(Point2D(192, 144));
-	path.push_back(Point2D(196, 144));
-	path.push_back(Point2D(198, 144));
-	path.push_back(Point2D(200, 144));
-	path.push_back(Point2D(201, 147));
-	path.push_back(Point2D(199, 149));
-	path.push_back(Point2D(194, 157));
-	path.push_back(Point2D(191, 160));
-	path.push_back(Point2D(186, 167));
-	path.push_back(Point2D(180, 176));
-	path.push_back(Point2D(177, 179));
-	path.push_back(Point2D(171, 187));
-	path.push_back(Point2D(169, 189));
-	path.push_back(Point2D(165, 194));
-	path.push_back(Point2D(164, 196));
-
-	return path;
-}
-
 int main(int argc, char** argv)
 {
-		
+	
+
+	srand(time(NULL));
+
+
+
 	// create a second thread for the TUIO listener
 	HANDLE hThread_TUIO;
 	unsigned threadID;

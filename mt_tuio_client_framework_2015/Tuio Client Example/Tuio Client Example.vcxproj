@@ -87,6 +87,7 @@
     <ClCompile Include="..\TUIO_CPP\oscpack\osc\OscReceivedElements.cpp" />
     <ClCompile Include="..\TUIO_CPP\TUIO\TuioClient.cpp" />
     <ClCompile Include="..\TUIO_CPP\TUIO\TuioTime.cpp" />
+    <ClCompile Include="form.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +104,7 @@
     <ClInclude Include="..\geasture\include\SampleGestures.h" />
     <ClInclude Include="..\geasture\include\SampleMultiStrokeGestures.h" />
     <ClInclude Include="..\geasture\include\utils.h" />
+    <ClInclude Include="form.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
